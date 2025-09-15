@@ -24,7 +24,7 @@ class ProductManager {
             // Save de los datos en el json y reconvertirlos de array a JSON
             await fs.writeFile( this.pathFile, JSON.stringify(products, null, 2), "utf-8" )
             
-            return { message: "Producto añadido correctamente", products };
+            return products
         } catch (error) {
             throw new Error("Error al añadir el producto:" + error.message);
         }
@@ -36,11 +36,24 @@ class ProductManager {
             const fileData = await fs.readFile( this.pathFile, "utf-8" );
             const products = JSON.parse(fileData);
 
-        return { message: "Lista de productos", products };
+        return products;
     } catch (error) {
             throw new Error("Error al visualizar los productos:" + error.message);
-    }
-       
+    }}
+
+    async getProductById(productId){
+        try {
+            //Lectura de los archivos
+            const fileData = await fs.readFile( this.pathFile, "utf-8" );
+            const products = JSON.parse(fileData);
+
+            const product = products.find( product => product.id === productId );
+            if(!product) throw new Error("El producto no existe");
+
+            return product;
+        } catch (error) {
+            throw new Error("Error al obtener el producto:" + error.message);
+        }
     }
 
     
@@ -56,9 +69,8 @@ class ProductManager {
             // Save de los datos en el json y reconvertirlos de array a JSON
             await fs.writeFile( this.pathFile, JSON.stringify(filteredProducts, null, 2), "utf-8" )
 
-             return {message: "producto eliminado", products: filteredProducts };
+             return filteredProducts;
 
-       
          } catch (error) {
        
              throw new Error("Error al borrar el producto:" + error.message);
@@ -80,7 +92,7 @@ class ProductManager {
             // Save de los datos en el json y reconvertirlos de array a JSON
             await fs.writeFile( this.pathFile, JSON.stringify(products, null, 2), "utf-8" )
 
-            return { message: "productos actualizados", products}
+            return products;
 
         } catch (error) {
            throw new Error("Error al cambiar el producto:" + error.message);
@@ -88,37 +100,4 @@ class ProductManager {
     }
 }
 
-async function main() {
-    try {
-        const productManager = new ProductManager ("./data/products.json");
-        //añadir los productos
-
-        // await productManager.addProduct({
-        //     title: "Zapatillas GOLD",
-        //     desciption: "this is a description lore",
-        //     price: 555,
-        //     thumbnail: "http&/",
-        //     code: "2Ad2",
-        //     stock: 10,})
-
-        // editar 
-
-        await productManager.setProductById("eee0edad-b162-4604-83f9-9093f4ecf965", {price: 922})
-
-        //borrar producto
-
-        await productManager.deleteProductById("eee0edad-b162-4604-83f9-9093f4ecf965")
-
-        // ver los productos
-
-        const products = await productManager.getProducts();
-        console.log(products)
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-main()
-
-
-
+export default ProductManager;
