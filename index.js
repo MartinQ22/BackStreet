@@ -1,46 +1,124 @@
-// Strings
-let name = "gza"
+import crypto from "crypto";
+import fs from "fs/promises";
 
-// Number 
-let id = 1;
+class ProductManager {
 
-//Boolean
-let isAdmin = false;
+    constructor(pathFile) {
+        this.pathFile = pathFile;
+    }
 
-//Null
-let user = null
+    generateNewId(){
+        return crypto.randomUUID();
+    }
 
-//date
-let date = new Date().toLocaleString()
-// (ver la fecha local)
+    async addProduct(newProduct){
+        try {
+            //Lectura de los archivos
+            const fileData = await fs.readFile( this.pathFile, "utf-8" );
+            const products = JSON.parse(fileData);
 
-function authUser(){
+            const newId = this.generateNewId();
+            // Creacion de producto 
+            const product = {id: newId, ...newProduct}
+            products.push(product)
+            // Save de los datos en el json y reconvertirlos de array a JSON
+            await fs.writeFile( this.pathFile, JSON.stringify(products, null, 2), "utf-8" )
+            
+            return { message: "Producto añadido correctamente", products };
+        } catch (error) {
+            throw new Error("Error al añadir el producto:" + error.message);
+        }
+    }
 
+ async getProducts(){
+    try {
+        //Lectura de los archivos
+            const fileData = await fs.readFile( this.pathFile, "utf-8" );
+            const products = JSON.parse(fileData);
+
+        return { message: "Lista de productos", products };
+    } catch (error) {
+            throw new Error("Error al visualizar los productos:" + error.message);
+    }
+       
+    }
+
+    
+    async deleteProductById(productId){
+       
+         try {
+            //Lectura de los archivos
+            const fileData = await fs.readFile( this.pathFile, "utf-8" );
+            const products = JSON.parse(fileData);
+
+             const filteredProducts = products.filter( product => product.id !== productId)
+    
+            // Save de los datos en el json y reconvertirlos de array a JSON
+            await fs.writeFile( this.pathFile, JSON.stringify(filteredProducts, null, 2), "utf-8" )
+
+             return {message: "producto eliminado", products: filteredProducts };
+
+       
+         } catch (error) {
+       
+             throw new Error("Error al borrar el producto:" + error.message);
+       
+         }
+    }
+
+    async setProductById(productId, updates){
+        try {
+            //Lectura de los archivos
+            const fileData = await fs.readFile( this.pathFile, "utf-8" );
+            const products = JSON.parse(fileData);
+
+            const indexProduct = products.findIndex( product => product.id === productId );
+            if(indexProduct === -1) throw new Error("El producto no existe");
+
+            products[indexProduct] = { ...products[indexProduct], ...updates};
+
+            // Save de los datos en el json y reconvertirlos de array a JSON
+            await fs.writeFile( this.pathFile, JSON.stringify(products, null, 2), "utf-8" )
+
+            return { message: "productos actualizados", products}
+
+        } catch (error) {
+           throw new Error("Error al cambiar el producto:" + error.message);
+        }
+    }
 }
 
-class User{
+async function main() {
+    try {
+        const productManager = new ProductManager ("./data/products.json");
+        //añadir los productos
 
+        // await productManager.addProduct({
+        //     title: "Zapatillas GOLD",
+        //     desciption: "this is a description lore",
+        //     price: 555,
+        //     thumbnail: "http&/",
+        //     code: "2Ad2",
+        //     stock: 10,})
+
+        // editar 
+
+        await productManager.setProductById("eee0edad-b162-4604-83f9-9093f4ecf965", {price: 922})
+
+        //borrar producto
+
+        await productManager.deleteProductById("eee0edad-b162-4604-83f9-9093f4ecf965")
+
+        // ver los productos
+
+        const products = await productManager.getProducts();
+        console.log(products)
+    } catch (error) {
+        console.log(error);
+    }
 }
 
-const userN = {
-    name: "Gara",
-    lastname: "Soto",
-
-}
-
-const alumn = ["Matias", "Alessandro" ]
-
-console.log(alumn);
-
-// terminal node ./"nombre del archivo" 
-
-function sumar (num1, num2){
-    const suma = num1 + num2;
-    return suma
-}
-
-const sumarArrow = (num1, num2)=> num1 + num2;
+main()
 
 
-console.log(sumarArrow);
 

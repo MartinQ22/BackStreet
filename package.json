@@ -1,0 +1,25 @@
+{
+  "name": "backstreet",
+  "version": "1.0.0",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MartinQ22/BackStreet.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MartinQ22/BackStreet/issues"
+  },
+  "homepage": "https://github.com/MartinQ22/BackStreet#readme",
+  "description": "",
+  "dependencies": {
+    "express": "^5.1.0",
+    "moment": "^2.30.1"
+  }
+}
