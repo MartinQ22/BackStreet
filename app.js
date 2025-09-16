@@ -1,8 +1,11 @@
 import express from "express";
 import ProductManager from "./productManager.js";
+import CartManager from "./cartManager.js";
 
 const app = express();
 app.use(express.json());
+
+const cartManager = new CartManager("./data/carts.json");
 
 const productManager = new ProductManager("./data/products.json");
 
@@ -67,10 +70,46 @@ app.put("/api/products/:pid", async(req, res)=>{
     }
 })
 
-// /api/Carritos
+//-------------------------- /api/Carritos ------------------------------
+
+//! metodo POST de crear carritos vacios
+app.post("/api/carts", async(req, res)=>{
+    try {
+        const newCart = req.body;
+        const carts = await cartManager.addCart(newCart)
+        res.status(201).json({message: "Nuevo Carrito Creado", carts});
+    } catch (error) {
+       res.status(500).json({message: error.message}); 
+    }
+})
+//! metodo traer productos del carrito UNFIN
+app.get("/api/carts/:cid", async(req, res)=>{
+    try {
+        const cid = req.params.cid; 
+        const products = await cartManager.getProductInCartById(cid);
+        res.status(200).json({message: "Productos Encontrado", products});
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+});
+
+//! metodo POST de agregar el producto al carrito cant
+app.post("/api/carts/:cid/products/:pid", async(req, res)=>{
+    try {
+        const cid = req.params.cid;
+        const pid = parseInt(req.params.pid);
+        const quantity = req.body.quantity;
+
+        const carts = await cartManager.addProductInCart(cid, pid, quantity);
+        res.status(200).json({message: "Producto Añadido", carts});
+    } catch (error) {
+       res.status(500).json({message: error.message}); 
+    }
+})
 
 
 app.listen( 8080, ()=>{
     console.log("Server funcionando correctamente");
 })
+
 

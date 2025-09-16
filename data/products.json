@@ -20,5 +20,82 @@
     "stock": 25,
     "status": true,
     "category": "ropa"
+  },
+  {
+    "id": "e4743653-72ae-4de0-af8c-e9e97b80c2e4",
+    "title": "Remera DEAD SPACE",
+    "description": "this is a description for my stuff",
+    "price": 20,
+    "thumbnail": "http&/",
+    "code": "2Ad2",
+    "stock": 20,
+    "status": true,
+    "category": "ropa"
+  },
+  {
+    "id": "7b66e88a-67fe-41cb-a125-0b899fc5b7af",
+    "title": "Remera SILENT HILL",
+    "description": "this is a description for my stuff",
+    "price": 22.97,
+    "thumbnail": "http&/",
+    "code": "2Ad2",
+    "stock": 20,
+    "status": true,
+    "category": "ropa"
+  },
+  {
+    "id": "24f275f8-5f66-4e68-9da3-3183b4639398",
+    "title": "campera RESIDENT EVIL",
+    "description": "this is a description for my stuff",
+    "price": 19.94,
+    "thumbnail": "http&/",
+    "code": "2Ad2",
+    "stock": 20,
+    "status": true,
+    "category": "ropa"
+  },
+  {
+    "id": "9c6450b0-7d29-4604-92a8-1c50cc1aeef5",
+    "title": "campera OBSCURE",
+    "description": "this is a description for my stuff",
+    "price": 39.94,
+    "thumbnail": "http&/",
+    "code": "2Ad2",
+    "stock": 20,
+    "status": true,
+    "category": "ropa"
+  },
+  {
+    "id": "ce4b29b8-f10d-4794-9442-0cf905584f66",
+    "title": "Zapatillas GOLDEN POST",
+    "description": "this is a description for my stuff",
+    "price": 399.94,
+    "thumbnail": "http&/",
+    "code": "2Ad2",
+    "stock": 10,
+    "status": true,
+    "category": "ropa"
+  },
+  {
+    "id": "51a06956-d09a-4bb0-947a-d6595dbcc946",
+    "title": "Collar DARK SOULS",
+    "description": "this is a description for my stuff",
+    "price": 12.16,
+    "thumbnail": "http&/",
+    "code": "2Ad2",
+    "stock": 10,
+    "status": true,
+    "category": "accesorios"
+  },
+  {
+    "id": "24f81b9e-cd86-402d-b4b5-017f4b1d7027",
+    "title": "Pulsera HALF LIFE 2",
+    "description": "this is a description for my stuff",
+    "price": 20.04,
+    "thumbnail": "http&/",
+    "code": "2Ad2",
+    "stock": 10,
+    "status": true,
+    "category": "accesorios"
   }
 ]
