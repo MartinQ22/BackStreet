@@ -6,9 +6,9 @@ class CartManager {
     }
 
     generateNewId = (carts) => {
-        if(carts.length > 0){
-            return carts [carts.length - 1].id + 1;
-        }
+    if (carts.length === 0) {return 1; }
+
+    return carts[carts.length - 1].id + 1;
     }
 
     //addCart
@@ -33,37 +33,47 @@ class CartManager {
     
      async addProductInCart(cid, pid, quantity){
         try {
-            const fileData = await fs.readFile( this.pathFile, "utf-8" );
-            const carts = JSON.parse(fileData);
+        const fileData = await fs.readFile(this.pathFile, "utf-8");
+        const carts = JSON.parse(fileData);
 
-            carts.forEach(cart => {
-                if(cart.id == cid){
+        const cart = carts.find(cartData => cartData.id == cid);
 
-                    cart.products.push({ id : pid, quantity})
-                };
-            });
+        if (cart) {
+            const existingProduct = cart.products.find(prod => prod.id == pid);
 
-            await fs.writeFile( this.pathFile, JSON.stringify(carts, null, 2), "utf-8" )
-            return carts;
-        } catch (error) {
-            throw new Error("Error al añadir el producto:" + error.message);
+            if (existingProduct) {
+                existingProduct.quantity += quantity;
+            } else {
+                cart.products.push({ id: pid, quantity });
+            }
+        } else {
+            throw new Error(`Error: Carrito con ID ${cid} no encontrado.`);
         }
+
+        await fs.writeFile(this.pathFile, JSON.stringify(carts, null, 2), "utf-8");
+        return carts;
+    } catch (error) {
+        throw new Error("Error al añadir el producto al carrito: " + error.message);
+    }
     }
 
     //GET
+    async getProductInCartById(cid) {
+    try {
+        const fileData = await fs.readFile(this.pathFile, "utf-8");
+        const carts = JSON.parse(fileData);
 
-    async getProductInCartById(cid){
-            try {
-                //Lectura de los archivos
-                const fileData = await fs.readFile( this.pathFile, "utf-8" );
-                const carts = JSON.parse(fileData);
-    
-                const cart = carts.find( (cartData) => cartData.id == cid );
-                return cart.products;
-            } catch (error) {
-                throw new Error("Error al obtener el producto:" + error.message);
-            }
+        const cart = carts.find((cartData) => cartData.id == cid);
+        
+        if (cart) {
+            return cart.products;
+        } else {
+            throw new Error(`Cart with ID ${cid} not found.`);
         }
+    } catch (error) {
+        throw new Error("Error getting product:" + error.message);
+    }
+}
 }
 
 

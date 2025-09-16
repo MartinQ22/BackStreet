@@ -94,7 +94,7 @@ app.get("/api/carts/:cid", async(req, res)=>{
 });
 
 //! metodo POST de agregar el producto al carrito cant
-app.post("/api/carts/:cid/products/:pid", async(req, res)=>{
+app.post("/api/carts/:cid/product/:pid", async(req, res)=>{
     try {
         const cid = req.params.cid;
         const pid = parseInt(req.params.pid);
