@@ -63,7 +63,7 @@ body {
 
 .status-admin {
     background-color: var(--admin-color);
-    color: var(--bg-dark);
+    color: var(--text-light);
 }
 
 .status-user {

@@ -1,12 +1,14 @@
 import express from "express";
 import { engine } from "express-handlebars";
-import ProductManager from "../productManager.js";
-import CartManager from "../cartManager.js";
-import { readFileSync } from "fs";
+import ProductManager from "./productManager.js";
+import CartManager from "./cartManager.js";
+import viewsRouter from "./routes/views.router.js";
+import productsRouter from "./routes/products.router.js";
 
 const app = express();
 app.use(express.json());
 app.use(express.static("public"));
+app.use(express.urlencoded( {extended: true }));
 
 //HandleBars Config
 app.engine("handlebars", engine());
@@ -16,31 +18,22 @@ app.set("views", "./src/views");
 const cartManager = new CartManager("./data/carts.json");
 const productManager = new ProductManager("./data/products.json");
 
-const allProducts = JSON.parse(readFileSync("./data/products.json", "utf8"));
+//endpoints Handlers
+app.use("/", viewsRouter);
+app.use("/api/products", productsRouter);
 
-//Endpoints Handlers
-
-app.get("/", (req,res)=>{
-    res.render("home")
-})
-
-app.get("/dashboard", (req,res)=>{
-    const user = {username: "BartenderDev1", isAdmin: true};
-
-    res.render("dashboard", { allProducts, user })
-})
 
 // /api/products
 
-// Metodo GET para obtener los productos
-app.get("/api/products", async(req, res)=>{
-    try {
-        const products = await productManager.getProducts();
-        res.status(200).json({message: "Lista de productos", products});
-    } catch (error) {
-        res.status(500).json({message: error.message});
-    }
-});
+// // Metodo GET para obtener los productos
+// app.get("/api/products", async(req, res)=>{
+//     try {
+//         const products = await productManager.getProducts();
+//         res.status(200).json({message: "Lista de productos", products});
+//     } catch (error) {
+//         res.status(500).json({message: error.message});
+//     }
+// });
 
 // Metodo GET POR ID para obtener un producto
 app.get("/api/products/:pid", async(req, res)=>{

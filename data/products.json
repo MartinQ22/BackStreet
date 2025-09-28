@@ -97,5 +97,17 @@
     "stock": 10,
     "status": true,
     "category": "accesorios"
+  },
+  {
+    "id": "22222786-4253-47af-b9d1-b67ad770d39d",
+    "title": "Producto nuevo añadido",
+    "price": 777,
+    "thumbnail": ""
+  },
+  {
+    "id": "692ec483-411e-46e7-b989-e6d0b1226d8c",
+    "title": "Zapatillas prueba",
+    "price": 22,
+    "thumbnail": "/img/1759054062916-Captura de pantalla 2025-05-11 061655.png"
   }
 ]
