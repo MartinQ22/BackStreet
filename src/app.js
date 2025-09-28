@@ -1,16 +1,33 @@
 import express from "express";
-import ProductManager from "./productManager.js";
-import CartManager from "./cartManager.js";
+import { engine } from "express-handlebars";
+import ProductManager from "../productManager.js";
+import CartManager from "../cartManager.js";
+import { readFileSync } from "fs";
 
 const app = express();
 app.use(express.json());
+app.use(express.static("public"));
+
+//HandleBars Config
+app.engine("handlebars", engine());
+app.set("view engine", "handlebars");
+app.set("views", "./src/views");
 
 const cartManager = new CartManager("./data/carts.json");
-
 const productManager = new ProductManager("./data/products.json");
 
-app.get("/", (req, res)=>{
-    res.send("Hola a todos!")
+const allProducts = JSON.parse(readFileSync("./data/products.json", "utf8"));
+
+//Endpoints Handlers
+
+app.get("/", (req,res)=>{
+    res.render("home")
+})
+
+app.get("/dashboard", (req,res)=>{
+    const user = {username: "BartenderDev1", isAdmin: true};
+
+    res.render("dashboard", { allProducts, user })
 })
 
 // /api/products
@@ -51,7 +68,7 @@ app.post("/api/products", async(req, res)=>{
     try {
        const newProduct = req.body;
        const product = await productManager.addProduct(newProduct)
-       res.status(201).json({message: "Producto agregado", products})
+       res.status(201).json({message: "Producto agregado", product})
     } catch (error) {
         res.status(500).json({message: error.message});
     }
@@ -94,7 +111,7 @@ app.get("/api/carts/:cid", async(req, res)=>{
 });
 
 //! metodo POST de agregar el producto al carrito cant
-app.post("/api/carts/:cid/product/:pid", async(req, res)=>{
+app.post("/api/carts/:cid/products/:pid", async(req, res)=>{
     try {
         const cid = req.params.cid;
         const pid = parseInt(req.params.pid);

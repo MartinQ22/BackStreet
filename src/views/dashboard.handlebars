@@ -1,0 +1,38 @@
+<div class="dashboard-container">
+    <header class="dashboard-header">
+        <h1 class="header-title">
+            Dashboard
+        </h1>
+    </header>
+
+    <div class="user-info">
+        {{#with user }}
+            <h2 class="user-name">
+                Bienvenido, {{username}}!
+            </h2>
+
+            {{#if isAdmin}}
+                <h3 class="admin-status status-admin">administrador identificado ✅</h3>
+            {{else}}
+                <h3 class="admin-status status-user">sin acceso de administrador 🔒</h3>
+            {{/if}}
+
+        {{/with}}
+    </div>
+
+    <section class="products-grid">
+        {{#each allProducts}}
+            <div class="product-card">
+                <img class="card-thumbnail" src="{{this.thumbnail}}" alt="{{this.title}}">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        {{this.title}}
+                    </h2>
+                    <h3 class="card-price">
+                        Precio: ${{this.price}}
+                    </h3>
+                </div>
+            </div>
+        {{/each}}
+    </section>
+</div>
