@@ -1,14 +1,38 @@
 import express from "express";
 import { engine } from "express-handlebars";
+import { Server } from "socket.io";
 import ProductManager from "./productManager.js";
 import CartManager from "./cartManager.js";
 import viewsRouter from "./routes/views.router.js";
 import productsRouter from "./routes/products.router.js";
+import http from "http";
 
 const app = express();
+const server = http.createServer(app);
+
+const io = new Server(server);
+
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded( {extended: true }));
+
+//Persistencia de mensajes
+const messages = [];
+
+//WebSocket
+io.on("connection", (socket)=> {
+    //emitir los mensajes al user nuevo 
+    socket.emit("message history", messages)
+
+    //event listener
+    socket.on("nuevo mensaje", (data) =>{
+        messages.push(data);
+        // mensaje transmitido para todos (Socket solo se usa para devolverle el mensaje al mismo usuario)
+        io.emit("broadcast new message", data);
+    })
+    
+});
+
 
 //HandleBars Config
 app.engine("handlebars", engine());
@@ -118,7 +142,7 @@ app.post("/api/carts/:cid/products/:pid", async(req, res)=>{
 })
 
 
-app.listen( 8080, ()=>{
+server.listen( 8080, ()=>{
     console.log("Server funcionando correctamente");
 })
 
