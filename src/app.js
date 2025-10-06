@@ -33,7 +33,6 @@ io.on("connection", (socket)=> {
     
 });
 
-
 //HandleBars Config
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
@@ -45,19 +44,6 @@ const productManager = new ProductManager("./data/products.json");
 //endpoints Handlers
 app.use("/", viewsRouter);
 app.use("/api/products", productsRouter);
-
-
-// /api/products
-
-// // Metodo GET para obtener los productos
-// app.get("/api/products", async(req, res)=>{
-//     try {
-//         const products = await productManager.getProducts();
-//         res.status(200).json({message: "Lista de productos", products});
-//     } catch (error) {
-//         res.status(500).json({message: error.message});
-//     }
-// });
 
 // Metodo GET POR ID para obtener un producto
 app.get("/api/products/:pid", async(req, res)=>{
@@ -75,6 +61,13 @@ app.delete("/api/products/:pid", async(req, res)=>{
     try {
         const pid = req.params.pid;
         const products = await productManager.deleteProductById(pid);
+
+        // broadcast updated list to all clients
+        const io = req.app.get("io");
+        if (io) {
+            io.emit("products:update", products);
+        }
+
         res.status(200).json({message: "Producto borrado", products});
     } catch (error) {
         res.status(500).json({message: error.message});

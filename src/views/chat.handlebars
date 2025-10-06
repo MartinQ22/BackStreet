@@ -1,0 +1,53 @@
+<div>
+    <h1>
+        Bienvenido al Chat!
+    </h1>
+    <form id="formChat">
+        <input type="text" id="inputUserName" placeholder="Nombre de Usuario" required>
+        <input type="text" id="inputChat" placeholder="Escribe tu mensaje" required>
+        <button type="submit">Enviar</button>
+    </form>
+    <div id="chatBox"></div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    //conexion iniciada por el cliente
+    const socket = io()
+
+    const main = () => {
+        //formulario
+        const formChat = document.getElementById("formChat")
+        const inputChat = document.getElementById("inputChat");
+        const inputUserName = document.getElementById("inputUserName");
+        formChat.addEventListener("submit", (event)=> {
+            event.preventDefault();
+
+            const username = inputUserName.value;
+            const message = inputChat.value;
+
+            inputChat.value = "";
+            socket.emit("nuevo mensaje", { message, username });
+ 
+        } )
+
+        socket.on("welcome", (data) => {
+            console.log(data.greeting);
+        })
+
+        //capturamos nuevos mensajes
+        socket.on("broadcast new message", (dataMessage)=>{
+                const chatBox = document.getElementById("chatBox");
+                chatBox.innerHTML += ` <p> ${dataMessage.username} - ${dataMessage.message} <p/>`
+        })
+        //capturamos historial de mensajes
+        socket.on("message history", (messages) => {
+            const chatBox = document.getElementById("chatBox");
+
+            messages.forEach((dataMessage)=> {
+                chatBox.innerHTML += ` <p> ${dataMessage.username} - ${dataMessage.message} <p/>`
+            })
+        })
+    }
+
+    main();
+</script>
