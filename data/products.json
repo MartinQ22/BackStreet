@@ -109,5 +109,38 @@
     "title": "Zapatillas prueba",
     "price": 22,
     "thumbnail": "/img/1759054062916-Captura de pantalla 2025-05-11 061655.png"
+  },
+  {
+    "id": "d867ddd7-b9b4-49a0-a10f-982681a9a422",
+    "title": "zzz",
+    "description": "zz",
+    "category": "zzz",
+    "image": {
+      "type": "Buffer",
+      "data": []
+    },
+    "price": "22"
+  },
+  {
+    "id": "08c81150-1bee-4e8b-b619-72e94d9e60e4",
+    "title": "Nuevo Producto 3",
+    "description": "123",
+    "category": "123",
+    "image": {
+      "type": "Buffer",
+      "data": []
+    },
+    "price": "123"
+  },
+  {
+    "id": "76939ac1-7fb6-4b01-8007-bdfbe2a74558",
+    "title": "asd",
+    "description": "asd",
+    "category": "asd",
+    "image": {
+      "type": "Buffer",
+      "data": []
+    },
+    "price": "123"
   }
 ]
