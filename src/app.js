@@ -1,37 +1,10 @@
 import express from "express";
 import { engine } from "express-handlebars";
-import { Server } from "socket.io";
-import ProductManager from "./productManager.js";
-import CartManager from "./cartManager.js";
-import viewsRouter from "./routes/views.router.js";
-import productsRouter from "./routes/products.router.js";
-import http from "http";
+import ProductManager from "../productManager.js";
+import CartManager from "../cartManager.js";
 
 const app = express();
-const server = http.createServer(app);
-
-const io = new Server(server);
-
 app.use(express.json());
-app.use(express.static("public"));
-app.use(express.urlencoded( {extended: true }));
-
-//Persistencia de mensajes
-const messages = [];
-
-//WebSocket
-io.on("connection", (socket)=> {
-    //emitir los mensajes al user nuevo 
-    socket.emit("message history", messages)
-
-    //event listener
-    socket.on("nuevo mensaje", (data) =>{
-        messages.push(data);
-        // mensaje transmitido para todos (Socket solo se usa para devolverle el mensaje al mismo usuario)
-        io.emit("broadcast new message", data);
-    })
-    
-});
 
 //HandleBars Config
 app.engine("handlebars", engine());
@@ -41,9 +14,30 @@ app.set("views", "./src/views");
 const cartManager = new CartManager("./data/carts.json");
 const productManager = new ProductManager("./data/products.json");
 
-//endpoints Handlers
-app.use("/", viewsRouter);
-app.use("/api/products", productsRouter);
+// Load all products from JSON file
+const allProducts = JSON.parse(readFileSync("./data/products.json", "utf8"));
+
+//Endpoints Handlers
+
+app.get("/", (req,res)=>{
+    res.render("home")
+})
+
+app.get("/dashboard", (req,res)=>{
+    res.render("dashboard", { products })
+})
+
+// /api/products
+
+// Metodo GET para obtener los productos
+app.get("/api/products", async(req, res)=>{
+    try {
+        const products = await productManager.getProducts();
+        res.status(200).json({message: "Lista de productos", products});
+    } catch (error) {
+        res.status(500).json({message: error.message});
+    }
+});
 
 // Metodo GET POR ID para obtener un producto
 app.get("/api/products/:pid", async(req, res)=>{
@@ -61,13 +55,6 @@ app.delete("/api/products/:pid", async(req, res)=>{
     try {
         const pid = req.params.pid;
         const products = await productManager.deleteProductById(pid);
-
-        // broadcast updated list to all clients
-        const io = req.app.get("io");
-        if (io) {
-            io.emit("products:update", products);
-        }
-
         res.status(200).json({message: "Producto borrado", products});
     } catch (error) {
         res.status(500).json({message: error.message});
@@ -135,7 +122,7 @@ app.post("/api/carts/:cid/products/:pid", async(req, res)=>{
 })
 
 
-server.listen( 8080, ()=>{
+app.listen( 8080, ()=>{
     console.log("Server funcionando correctamente");
 })
 

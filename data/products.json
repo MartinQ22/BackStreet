@@ -4,7 +4,7 @@
     "title": "Zapatillas SILVER POST",
     "description": "this is a description lore",
     "price": 505,
-    "thumbnail": "http&/",
+    "thumbnail": "",
     "code": "2Ad2",
     "stock": 10,
     "status": true,
@@ -15,7 +15,7 @@
     "title": "Remera OASIS BLANCA",
     "description": "this is a description lore YEAH",
     "price": 23.55,
-    "thumbnail": "http&/",
+    "thumbnail": "",
     "code": "2Ad2",
     "stock": 25,
     "status": true,
@@ -26,7 +26,7 @@
     "title": "Remera DEAD SPACE",
     "description": "this is a description for my stuff",
     "price": 20,
-    "thumbnail": "http&/",
+    "thumbnail": "",
     "code": "2Ad2",
     "stock": 20,
     "status": true,
@@ -37,7 +37,7 @@
     "title": "Remera SILENT HILL",
     "description": "this is a description for my stuff",
     "price": 22.97,
-    "thumbnail": "http&/",
+    "thumbnail": "",
     "code": "2Ad2",
     "stock": 20,
     "status": true,
@@ -48,7 +48,7 @@
     "title": "campera RESIDENT EVIL",
     "description": "this is a description for my stuff",
     "price": 19.94,
-    "thumbnail": "http&/",
+    "thumbnail": "",
     "code": "2Ad2",
     "stock": 20,
     "status": true,
@@ -59,7 +59,7 @@
     "title": "campera OBSCURE",
     "description": "this is a description for my stuff",
     "price": 39.94,
-    "thumbnail": "http&/",
+    "thumbnail": "",
     "code": "2Ad2",
     "stock": 20,
     "status": true,
@@ -81,7 +81,7 @@
     "title": "Collar DARK SOULS",
     "description": "this is a description for my stuff",
     "price": 12.16,
-    "thumbnail": "http&/",
+    "thumbnail": "",
     "code": "2Ad2",
     "stock": 10,
     "status": true,
@@ -92,7 +92,7 @@
     "title": "Pulsera HALF LIFE 2",
     "description": "this is a description for my stuff",
     "price": 20.04,
-    "thumbnail": "http&/",
+    "thumbnail": "",
     "code": "2Ad2",
     "stock": 10,
     "status": true,
@@ -109,5 +109,17 @@
     "title": "Zapatillas prueba",
     "price": 22,
     "thumbnail": "/img/1759054062916-Captura de pantalla 2025-05-11 061655.png"
+  },
+  {
+    "id": "921def4f-fdde-4672-b96e-e3b7fbf6210b",
+    "image": {
+      "type": "Buffer",
+      "data": []
+    }
+  },
+  {
+    "id": "3d09b88b-8224-4b36-9838-5eec0473b8e4",
+    "price": null,
+    "thumbnail": "/img/ZA.png"
   }
 ]

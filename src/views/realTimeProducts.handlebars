@@ -2,7 +2,7 @@
     <h1>
         Manejador de productos
     </h1>
-    <form id="createProduct" action="http://localhost:8080/api/products" method="post" enctype="multipart/form-data">
+    <form id="formNewProduct">
         <input type="text" id="inputProductTitle" placeholder="titulo del producto" required>
         <input type="text" id="inputDescription" placeholder="Descripcion del producto" required>
         <input type="text" id="inputCategory" placeholder="Categoria del producto" required>
@@ -11,8 +11,9 @@
         <button type="submit">Agregar Producto</button>
     </form>
 </div>
+
 {{!-- LISTA DE PRODUCTOS --}}
-     <section class="products-grid">
+     <section id="productsList"  class="products-grid">
         {{#each products}}
             <div class="product-card">
                 <img class="card-thumbnail" src="{{this.thumbnail}}" alt="{{this.title}}">
@@ -27,26 +28,32 @@
             </div>
         {{/each}}
     </section>
+
 <script src="/socket.io/socket.io.js"></script>
 <script>
-    //conexion iniciada por el cliente
     const socket = io()
 
     const main = () => {
         //agregar producto 
-        const createProduct = document.getElementById("createProduct")
+        const formNewProduct = document.getElementById("formNewProduct")
         const inputDescription = document.getElementById("inputDescription");
         const inputPrice = document.getElementById("inputPrice");
         const inputCategory = document.getElementById("inputCategory");
         const inputProductTitle = document.getElementById("inputProductTitle");
         const inputImage = document.getElementById("inputImage")
 
-        createProduct.addEventListener("submit", (event)=> {
+        formNewProduct.addEventListener("submit", (event)=> {
             event.preventDefault();
+            const formData = new FormData(formNewProduct)
+            const productData = {};
+
+            formData.forEach((value,key)=>{
+                productData[key] = value;
+            })
 
             const title = inputProductTitle.value;
             const description = inputDescription.value;
-            const price = inputChat.value;
+            const price = inputPrice.value;
             const category = inputCategory.value;
             const image = inputImage.value;
 
@@ -55,27 +62,25 @@
             inputCategory.value = "";
             inputPrice.value = "";
             inputProductTitle.value = "";
-            socket.emit("nuevo producto", { title, description, price, category, image });
- 
-        } )
 
-        socket.on("welcome", (data) => {
-            console.log(data.greeting);
+            socket.emit("newProduct", productData);
+
         })
+            socket.on("productsAdded", (newProduct)=>{
+                const productsList = document.getElementById("productList")
 
-        //capturamos nuevos mensajes
-        socket.on("broadcast new message", (dataMessage)=>{
-                const chatBox = document.getElementById("chatBox");
-                chatBox.innerHTML += ` <p> ${dataMessage.productTitle} - ${dataMessage.message} <p/>`
-        })
-        //capturamos historial de mensajes
-        socket.on("message history", (messages) => {
-            const chatBox = document.getElementById("chatBox");
-
-            messages.forEach((dataMessage)=> {
-                chatBox.innerHTML += ` <p> ${dataMessage.productTitle} - ${dataMessage.message} <p/>`
+                productsList.innerHTML += `<div class="product-card">
+                <img class="card-thumbnail" src="${newProduct.thumbnail}" alt="${newProduct.title}">
+                <div class="card-body">
+                    <h2 class="card-title">
+                        ${newProduct.title}
+                    </h2>
+                    <h3 class="card-price">
+                        Precio: ${newProduct.price}
+                    </h3>
+                </div>
+            </div>`
             })
-        })
     }
 
     main();
