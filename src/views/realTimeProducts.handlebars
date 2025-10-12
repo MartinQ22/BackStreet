@@ -3,17 +3,17 @@
         Manejador de productos
     </h1>
     <form id="formNewProduct">
-        <input type="text" id="inputProductTitle" placeholder="titulo del producto" required>
-        <input type="text" id="inputDescription" placeholder="Descripcion del producto" required>
-        <input type="text" id="inputCategory" placeholder="Categoria del producto" required>
+        <input type="text" id="inputProductTitle" name="title" placeholder="titulo del producto" required>
+        <input type="text" id="inputDescription" name="description" placeholder="Descripcion del producto" required>
+        <input type="text" id="inputCategory" name="category" placeholder="Categoria del producto" required>
         <input type="file" id="inputImage" name="image">
-        <input type="number" id="inputPrice" placeholder="precio del producto" required>
+        <input type="number" id="inputPrice" name="price"  placeholder="precio del producto" required>
         <button type="submit">Agregar Producto</button>
     </form>
 </div>
 
 {{!-- LISTA DE PRODUCTOS --}}
-     <section id="productsList"  class="products-grid">
+     <section id="productList" class="products-grid">
         {{#each products}}
             <div class="product-card">
                 <img class="card-thumbnail" src="{{this.thumbnail}}" alt="{{this.title}}">
@@ -25,6 +25,9 @@
                         Precio: ${{this.price}}
                     </h3>
                 </div>
+            <button class="delete-product-btn" data-id="{{this.id}}">
+                    Borrar
+            </button>
             </div>
         {{/each}}
     </section>
@@ -36,6 +39,7 @@
     const main = () => {
         //agregar producto 
         const formNewProduct = document.getElementById("formNewProduct")
+
         const inputDescription = document.getElementById("inputDescription");
         const inputPrice = document.getElementById("inputPrice");
         const inputCategory = document.getElementById("inputCategory");
@@ -44,12 +48,13 @@
 
         formNewProduct.addEventListener("submit", (event)=> {
             event.preventDefault();
-            const formData = new FormData(formNewProduct)
-            const productData = {};
 
-            formData.forEach((value,key)=>{
+            const formData = new FormData(formNewProduct)
+            const productData = {}
+
+            formData.forEach((value, key)=> {   
                 productData[key] = value;
-            })
+            });
 
             const title = inputProductTitle.value;
             const description = inputDescription.value;
@@ -63,24 +68,39 @@
             inputPrice.value = "";
             inputProductTitle.value = "";
 
+
             socket.emit("newProduct", productData);
-
+ 
         })
-            socket.on("productsAdded", (newProduct)=>{
-                const productsList = document.getElementById("productList")
+            socket.on("productAdded", (newProduct)=> {
+    const productList = document.getElementById("productList");
+    productList.innerHTML += `<div class="product-card">
+            <img class="card-thumbnail" src="${newProduct.thumbnail}" alt="${newProduct.title}">
+            <div class="card-body">
+                <h2 class="card-title">${newProduct.title}</h2>
+                <h3 class="card-price">Precio: $${newProduct.price}</h3>
+            </div>
+                <button class="delete-product-btn" data-id="${newProduct.id}">Borrar</button>
+</div>`;
+})
 
-                productsList.innerHTML += `<div class="product-card">
-                <img class="card-thumbnail" src="${newProduct.thumbnail}" alt="${newProduct.title}">
-                <div class="card-body">
-                    <h2 class="card-title">
-                        ${newProduct.title}
-                    </h2>
-                    <h3 class="card-price">
-                        Precio: ${newProduct.price}
-                    </h3>
-                </div>
-            </div>`
-            })
+        // Funcion para borrar
+        document.getElementById("productList").addEventListener("click", (event) => {
+            if (event.target.classList.contains("delete-product-btn")) {
+
+                const productId = event.target.getAttribute("data-id");
+                socket.emit("deleteProduct", productId);
+            }
+        });
+
+        socket.on("productDeleted", (deletedProductId) => {
+            
+            const deleteBtn = document.querySelector(`button[data-id="${deletedProductId}"]`);
+            if (deleteBtn) {
+                const productCard = deleteBtn.closest(".product-card");
+                productCard.remove();
+            }
+        });
     }
 
     main();
