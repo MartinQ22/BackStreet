@@ -1,11 +1,24 @@
 import express from "express";
+import connectMongoDB from "./config/db.js"
 import { engine } from "express-handlebars";
-import ProductManager from "../productManager.js";
-import CartManager from "../cartManager.js";
+import { Server } from "socket.io";
+import ProductManager from "./productManager.js";
+import CartManager from "./cartManager.js";
+import viewsRouter from "./routes/views.router.js";
+import productsRouter from "./routes/products.router.js";
+import dotenv from "dotenv";
+import http from "http";
 
+//inciializar tareas de entorno
+dotenv.config()
+
+const PORT = process.env.PORT;
 const app = express();
 const server = http.createServer(app);
 
+connectMongoDB();
+
+//Socket.io
 const io = new Server(server);
 app.set("io", io);
 
@@ -32,7 +45,7 @@ io.on("connection", (socket) => {
     io.emit("broadcast new message", data);
   });
 
-  //agregar nuevo producto
+  //agregar nuevo productohy
   socket.on("newProduct", async (productData) => {
     try {
       const newProduct = await productManager.addProduct(productData);
@@ -148,6 +161,7 @@ app.post("/api/carts/:cid/products/:pid", async (req, res) => {
   }
 });
 
-server.listen(8080, () => {
+//iniciar server
+server.listen(PORT, () => {
   console.log("Server funcionando correctamente");
 });

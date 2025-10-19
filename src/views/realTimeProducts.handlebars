@@ -11,7 +11,6 @@
         <button type="submit">Agregar Producto</button>
     </form>
 </div>
-
 {{!-- LISTA DE PRODUCTOS --}}
      <section id="productList" class="products-grid">
         {{#each products}}
@@ -31,9 +30,9 @@
             </div>
         {{/each}}
     </section>
-
 <script src="/socket.io/socket.io.js"></script>
 <script>
+    //conexion iniciada por el cliente
     const socket = io()
 
     const main = () => {
