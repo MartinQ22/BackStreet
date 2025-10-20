@@ -5,7 +5,7 @@
     --card-bg: #212121;
     --admin-color: #4CAF50; /* Verde */
     --user-color: #FF9800; /* Naranja/Ámbar */
-    --spacing: 20px;
+    --spacing: 24px;
 }
 
 /* ----------------------------------------------------- */
@@ -13,7 +13,6 @@
 /* ----------------------------------------------------- */
 
 body {
-    /* Aplicar fondo oscuro al body y texto claro global */
     background-color: var(--bg-dark);
     color: var(--text-light);
     font-family: Arial, sans-serif;
@@ -76,11 +75,10 @@ body {
 /* ----------------------------------------------------- */
 
 .products-grid {
-    /* 1. Usar display GRID para la disposición de las tarjetas */
+    
     display: grid;
-    /* 2. Repetir columnas que se ajustan al tamaño de la pantalla */
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: var(--spacing); /* Espacio entre las tarjetas */
+    gap: var(--spacing); 
     padding: 0;
 }
 
