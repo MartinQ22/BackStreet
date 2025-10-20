@@ -9,19 +9,25 @@ const productManager = new ProductManager("./data/products.json");
 //mongoose get products
 productsRouter.get("/", async(req, res)=>{
   try {
-    const products = await Product.find()
-    res.status(200).json({ status: "success", payload: products })
+
+    const { limit = 10, page = 1 } = req.query;
+
+    const data = await Product.paginate( {}, { limit, page } );
+    const products = data.docs;
+    delete data.docs;
+
+    res.status(200).json({ status: "success", payload: products, ...data });
   } catch (error) {
-    res.status(500).json({ status: "error", message: "Error al recuperar el producto" })
+    res.status(500).json({ status: "error", message: "Error al recuperar el producto" });
   }
 });
 
 productsRouter.post("/", async (req, res) => {
   try {
     //aca creamos el producto de forma local
-    const { title, price, stock, category } = req.body;
+    const { title, description, code, price,category, stock  } = req.body;
 
-    const product = new Product({ title, price, stock, category })
+    const product = new Product({ title, description, code, price,category, stock })
     //aca lo guardamos
     await product.save();
     res.status(201).json({ status: "success", payload: product })
