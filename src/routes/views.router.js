@@ -25,7 +25,6 @@ viewsRouter.get("/", async(req,res) => {
         }
         
         res.render("home", { products, links })
-        // const products = await productManager.getProducts();
     } catch (error) {
         res.status(500).json({ message: error.message })
     }
@@ -49,6 +48,22 @@ viewsRouter.get("/realtimeproducts", async(req,res) => {
     const products = await productManager.getProducts();
 
     res.render("realTimeProducts", { products })
+})
+
+// Product Detail 
+viewsRouter.get("/product/:pid", async(req,res) => {
+    try {
+        const { pid } = req.params;
+        const product = await Product.findById(pid).lean();
+        
+        if (!product) {
+            return res.status(404).render("error", { message: "Producto no encontrado" });
+        }
+        
+        res.render("productDetail", { product });
+    } catch (error) {
+        res.status(500).render("error", { message: "Error al cargar el producto" });
+    }
 })
 
 

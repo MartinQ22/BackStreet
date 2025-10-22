@@ -8,7 +8,6 @@ import viewsRouter from "./routes/views.router.js";
 import productsRouter from "./routes/products.router.js";
 import cartRouter from "./routes/carts.router.js";
 import dotenv from "dotenv";
-import __dirname from "../dirname.js";
 import http from "http";
 
 //inciializar tareas de entorno

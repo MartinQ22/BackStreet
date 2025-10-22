@@ -6,7 +6,7 @@ import uploader from "../utils/uploader.js";
 const productsRouter = express.Router();
 const productManager = new ProductManager("./data/products.json");
 
-//mongoose get products
+//Traer productos
 productsRouter.get("/", async(req, res)=>{
   try {
 
@@ -22,18 +22,19 @@ productsRouter.get("/", async(req, res)=>{
   }
 });
 
+
+
+// Crear producto
 productsRouter.post("/", async (req, res) => {
   try {
-    //aca creamos el producto de forma local
-    const { title, description, code, price,category, stock  } = req.body;
+    const { title, description, code, price, category, stock } = req.body;
+    const product = new Product({ title, description, code, price, category, stock })
 
-    const product = new Product({ title, description, code, price,category, stock })
-    //aca lo guardamos
     await product.save();
     res.status(201).json({ status: "success", payload: product })
   } catch (error) {
-    res.status(500).json({ status: "error", message: "Error al crear el producto" })
-  }
+         res.status(500).json({ status: "error", message: "Error al crear el producto" })
+    }
 })
 
 //Modificar producto
@@ -56,7 +57,6 @@ productsRouter.delete("/:pid", async (req, res) => {
   try {
     const pid = req.params.pid;
     const deletedProduct = await Product.findByIdAndDelete(pid)
-
     if (!deletedProduct) return res.status(404).json({ status: "error", message: "Error al encontrar el producto" });
 
     res.status(200).json({ status: "success", message: "↓↓↓ Producto eliminado ↓↓↓", payload: deletedProduct })
@@ -72,7 +72,6 @@ productsRouter.post("/", uploader.single("image"), async (req, res) => {
   const thumbnail = "/img/" + req.file.filename;
 
   await productManager.addProduct({ title, price, thumbnail });
-
   res.redirect("/dashboard");
 });
 
