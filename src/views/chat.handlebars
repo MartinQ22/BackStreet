@@ -1,3 +1,4 @@
+{{!-- PAGINA DEL CHAT --}}
 <div>
     <h1>
         Bienvenido al Chat!
@@ -34,12 +35,12 @@
             console.log(data.greeting);
         })
 
-        //capturamos nuevos mensajes
+        //captura de nuevos mensajes
         socket.on("broadcast new message", (dataMessage)=>{
                 const chatBox = document.getElementById("chatBox");
                 chatBox.innerHTML += ` <p> ${dataMessage.username} - ${dataMessage.message} <p/>`
         })
-        //capturamos historial de mensajes
+        //captura historial de mensajes
         socket.on("message history", (messages) => {
             const chatBox = document.getElementById("chatBox");
 

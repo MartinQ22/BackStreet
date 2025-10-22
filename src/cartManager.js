@@ -15,7 +15,6 @@ class CartManager {
 
     async addCart(newCart){
         try {
-            //Lectura de los archivos
             const fileData = await fs.readFile( this.pathFile, "utf-8" );
             const carts = JSON.parse(fileData);
 

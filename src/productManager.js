@@ -62,7 +62,6 @@ class ProductManager {
 
   async deleteProductById(productId) {
     try {
-      //Lectura de los archivos
       const fileData = await fs.readFile(this.pathFile, "utf-8");
       const products = JSON.parse(fileData);
 
@@ -70,7 +69,6 @@ class ProductManager {
         (product) => product.id !== productId
       );
 
-      // Save de los datos en el json y reconvertirlos de array a JSON
       await fs.writeFile(
         this.pathFile,
         JSON.stringify(filteredProducts, null, 2),
@@ -85,7 +83,6 @@ class ProductManager {
 
   async setProductById(productId, updates) {
     try {
-      //Lectura de los archivos
       const fileData = await fs.readFile(this.pathFile, "utf-8");
       const products = JSON.parse(fileData);
 
@@ -93,10 +90,8 @@ class ProductManager {
         (product) => product.id === productId
       );
       if (indexProduct === -1) throw new Error("El producto no existe");
-
       products[indexProduct] = { ...products[indexProduct], ...updates };
 
-      // Save de los datos en el json y reconvertirlos de array a JSON
       await fs.writeFile(
         this.pathFile,
         JSON.stringify(products, null, 2),

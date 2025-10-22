@@ -24,7 +24,7 @@ productsRouter.get("/", async(req, res)=>{
 
 
 
-// Crear producto
+//Crear producto
 productsRouter.post("/", async (req, res) => {
   try {
     const { title, description, code, price, category, stock } = req.body;
@@ -37,7 +37,7 @@ productsRouter.post("/", async (req, res) => {
     }
 })
 
-//Modificar producto
+//Modificar Producto
 productsRouter.put("/:pid", async (req, res) => {
   try {
     const pid = req.params.pid;
@@ -52,7 +52,7 @@ productsRouter.put("/:pid", async (req, res) => {
   }
 });
 
-//Borrar producto
+//Borrar Producto
 productsRouter.delete("/:pid", async (req, res) => {
   try {
     const pid = req.params.pid;
@@ -65,7 +65,7 @@ productsRouter.delete("/:pid", async (req, res) => {
   }
 });
 
-//productos Dashboard
+//Subir productos con ruta declarada Multer (Dashboard)
 productsRouter.post("/", uploader.single("image"), async (req, res) => {
   const title = req.body.title;
   const price = parseInt(req.body.price);
@@ -75,7 +75,7 @@ productsRouter.post("/", uploader.single("image"), async (req, res) => {
   res.redirect("/dashboard");
 });
 
-//Productos Route para realTimeProducts
+//Subir productos con ruta declarada Multer (realTimeProducts)
 productsRouter.post("/", uploader.single("image"), async (req, res) => {
   const title = req.body.title;
   const description = req.body.description;

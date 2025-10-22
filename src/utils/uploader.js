@@ -11,7 +11,6 @@ const storage = multer.diskStorage( {
 })
 
 //middleware
-
 const uploader = multer ({storage})
 
 export default uploader;
