@@ -59,7 +59,7 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
     const quantity = req.body.quantity;
 
     const updatedCart = await Cart.findByIdAndUpdate(cid, { $push: { products: { product: pid , quantity } } }, { new: true, runValidators: true });
-    if(!cart) return res.status(404).json({ status: "error", message: "Error al agregar el producto" });
+    if(!updatedCart) return res.status(404).json({ status: "error", message: "Error al agregar el producto" });
     res.status(200).json({ message: "Producto Añadido", payload: updatedCart });
   } catch (error) {
     res.status(500).json({ status: "error", message: "Error al añadir el producto al carrito" })

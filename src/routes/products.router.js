@@ -1,10 +1,7 @@
 import express from "express";
 import Product from "../models/product.model.js";
-import ProductManager from "../productManager.js";
-import uploader from "../utils/uploader.js";
 
 const productsRouter = express.Router();
-const productManager = new ProductManager("./data/products.json");
 
 //Traer productos
 productsRouter.get("/", async(req, res)=>{
@@ -22,9 +19,7 @@ productsRouter.get("/", async(req, res)=>{
   }
 });
 
-
-
-//Crear producto
+// Crear producto
 productsRouter.post("/", async (req, res) => {
   try {
     const { title, description, code, price, category, stock } = req.body;
@@ -63,41 +58,6 @@ productsRouter.delete("/:pid", async (req, res) => {
   } catch (error) {
     res.status(500).json({ status: "error", message: "Error al borrar el producto"  });
   }
-});
-
-//Subir productos con ruta declarada Multer (Dashboard)
-productsRouter.post("/", uploader.single("image"), async (req, res) => {
-  const title = req.body.title;
-  const price = parseInt(req.body.price);
-  const thumbnail = "/img/" + req.file.filename;
-
-  await productManager.addProduct({ title, price, thumbnail });
-  res.redirect("/dashboard");
-});
-
-//Subir productos con ruta declarada Multer (realTimeProducts)
-productsRouter.post("/", uploader.single("image"), async (req, res) => {
-  const title = req.body.title;
-  const description = req.body.description;
-  const category = req.body.category;
-  const price = parseInt(req.body.price);
-  const thumbnail = req.file ? "/img/" + req.file.filename : "";
-
-  const newProduct = await productManager.addProduct({ 
-    title, 
-    description, 
-    category, 
-    price, 
-    thumbnail 
-  });
-
-  // Emitir el evento Socket.IO para actualizar a todos los clientes
-  const io = req.app.get("io");
-  if (io) {
-    io.emit("productAdded", newProduct[newProduct.length - 1]);
-  }
-
-  res.redirect("/realtimeproducts");
 });
 
 export default productsRouter;

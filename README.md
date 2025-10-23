@@ -1,6 +1,6 @@
 # 🛍️ BACKSTREET E-COMMERCE API
 
-Proyecto Backend desarrollado con **Node.js y Express** que simula un sistema de gestión de productos y carritos de compra. Utiliza **MongoDB Atlas** para la persistencia de datos y **Socket.IO** para la interacción en tiempo real.
+Proyecto Backend desarrollado con **Node.js y Express** que simula un sistema de gestión de productos y carritos de compra. Utiliza **MongoDB Atlas** para la persistencia de datos y **Socket.IO** para la interacción en tiempo real (funcion omitida).
 
 En este proyecto puedes visualizar la página y el dashboard usando Handlebars.
 
@@ -40,10 +40,10 @@ El proyecto está construido con la siguiente stack tecnológica:
 | :--- | :--- | :--- |
 | **Backend** | **Node.js & Express** | Servidor y enrutamiento de la API. |
 | **Base de Datos** | **Mongoose** (con MongoDB Atlas) | Modelado de datos y conexión a la base de datos en la nube. |
-| **Frontend** | **Handlebars** (`express-handlebars`) | Motor de plantillas para la visualización de la página y el dashboard. |
+| **Frontend** | **Handlebars** (`express-handlebars`) | Motor de plantillas para la visualización de la página. |
 | **Real-Time** | **Socket.IO** | Comunicación bidireccional para la **actualización en vivo** de productos. |
 | **Seguridad** | **`dotenv`** | Gestión de variables de entorno para datos sensibles. |
-| **Archivos** | **`multer`** | Manejo de subida de archivos (imágenes) en las peticiones HTTP. |
+| **Archivos** | **`multer`** | Manejo de subida de archivos (imágenes) en las peticiones HTTP. (Funcion quitada)| 
 
 ### Dependencias de `package.json`
 
